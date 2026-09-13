@@ -1,0 +1,8 @@
+DATE: $(date -Is)
+SOURCE: /media/aslam/3826-7FF7 (sdb1 - 7.5G vfat)
+DESTINATION: /mnt/extra_sd/sdb1_archive (UD_STORAGE)
+FILES: 23
+SIZE: 514.87 MB
+METHOD: rsync -avh
+VERIFY: sha256sum (23 files match)
+STATUS: ARCHIVE_OK - Original sdb1 can be wiped or repurposed
