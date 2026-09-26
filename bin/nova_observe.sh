@@ -13,6 +13,8 @@ HIGH=$(tail -20 "$LOG" | grep -o 'disk=[0-9]*%' | tr -d 'disk=%' | awk '$1>85' |
 if [ "$HIGH" -ge 15 ]; then
   ID="disk-$(date +%Y%m%d)"
   [ -f "$P/$ID.json" ] && exit 0
+  [ -f "proposals/approved/$ID.json" ] && { echo "SKIP: already approved"; exit 0; }
+  [ -f "proposals/rejected/$ID.json" ] && { echo "SKIP: already rejected"; exit 0; }
   cat > "$P/$ID.json" << JSON
 {
   "id": "$ID",

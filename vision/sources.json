@@ -1,0 +1,37 @@
+{
+  "palm.onnx": {
+    "url": "https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/palm_detection_mediapipe/palm_detection_mediapipe_2023feb.onnx",
+    "sha256": "78ff51c38496b7fc8b8ebdb6cc8c1abb02fa6c38427c6848254cdaba57fcce7c",
+    "bytes": 3905734
+  },
+  "hand.onnx": {
+    "url": "https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/handpose_estimation_mediapipe/handpose_estimation_mediapipe_2023feb.onnx",
+    "sha256": "db0898ae717b76b075d9bf563af315b29562e11f8df5027a1ef07b02bef6d81c",
+    "bytes": 4099621
+  },
+  "face.xml": {
+    "url": "https://raw.githubusercontent.com/opencv/opencv/4.x/data/haarcascades/haarcascade_frontalface_default.xml",
+    "sha256": "0f7d4527844eb514d4a4948e822da90fbb16a34a0bbbbc6adc6498747a5aafb0",
+    "bytes": 930127
+  },
+  "eyes.xml": {
+    "url": "https://raw.githubusercontent.com/opencv/opencv/4.x/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml",
+    "sha256": "e32f9c67935c33e9d1331eb14fa58554ff17835c03742663bcb97a892e936a57",
+    "bytes": 601661
+  },
+  "LICENSE-opencv-zoo": {
+    "url": "https://raw.githubusercontent.com/opencv/opencv_zoo/main/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "bytes": 11357
+  },
+  "LICENSE-palm": {
+    "url": "https://raw.githubusercontent.com/opencv/opencv_zoo/main/models/palm_detection_mediapipe/LICENSE",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "bytes": 11358
+  },
+  "LICENSE-hand": {
+    "url": "https://raw.githubusercontent.com/opencv/opencv_zoo/main/models/handpose_estimation_mediapipe/LICENSE",
+    "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+    "bytes": 11357
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "agent-camera_unavailable",
+  "created": "2026-09-22T00:32:43+04:00",
+  "observation": "Camera process is alive but no usable camera frame is available",
+  "suggestion": "Inspect and repair this condition; request owner approval before service, hardware, network, credential, or system-wide changes.",
+  "risk": "Agent did not perform risky recovery automatically.",
+  "status": "approved",
+  "owner_decision_at": "2026-09-21T21:29:39.439Z"
+}

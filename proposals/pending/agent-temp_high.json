@@ -1,0 +1,8 @@
+{
+  "id": "agent-temp_high",
+  "created": "2026-09-26T15:37:41+04:00",
+  "observation": "Pi temperature is 70.0 C",
+  "suggestion": "Inspect and repair this condition; request owner approval before service, hardware, network, credential, or system-wide changes.",
+  "risk": "Agent did not perform risky recovery automatically.",
+  "status": "pending"
+}

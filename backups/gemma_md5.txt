@@ -1,0 +1,1 @@
+1e6d84910699e9b4063e25daccf35482  /mnt/extra_sd/models/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf

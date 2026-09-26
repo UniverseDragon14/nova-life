@@ -1,0 +1,9 @@
+{
+  "id": "agent-voice_agent_down",
+  "created": "2026-09-22T02:08:40+04:00",
+  "observation": "NOVA voice agent is not running",
+  "suggestion": "Inspect and repair this condition; request owner approval before service, hardware, network, credential, or system-wide changes.",
+  "risk": "Agent did not perform risky recovery automatically.",
+  "status": "approved",
+  "owner_decision_at": "2026-09-21T23:40:57.351Z"
+}

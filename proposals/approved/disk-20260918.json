@@ -4,5 +4,6 @@
   "observation": "disk above 85% in 20 of last 20 heartbeats",
   "suggestion": "review large files under /home and /var/log",
   "risk": "read-only analysis, no deletion",
-  "status": "pending"
+  "status": "approved",
+  "owner_decision_at": "2026-09-18T06:00:53.722Z"
 }

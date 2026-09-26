@@ -1,0 +1,8 @@
+{
+  "id": "disk-20260919",
+  "created": "2026-09-19T08:00:01+04:00",
+  "observation": "disk above 85% in 20 of last 20 heartbeats",
+  "suggestion": "review large files under /home and /var/log",
+  "risk": "read-only analysis, no deletion",
+  "status": "pending"
+}
