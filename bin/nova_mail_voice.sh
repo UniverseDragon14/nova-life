@@ -5,7 +5,8 @@ TEXT="${1:-}"
 SUBJECT="${2:-NOVA voice message}"
 PROFILE="${3:-nova_warm}"
 INTENSITY="${4:-0.70}"
-OUTBOX="/mnt/extra_sd/nova_home/outbox"
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
+OUTBOX="$NOVA_HOME/outbox"
 VOICE_URL="${NOVA_VOICE_URL:-http://127.0.0.1:8124/v2/speak}"
 
 if [[ -z "$TEXT" ]]; then

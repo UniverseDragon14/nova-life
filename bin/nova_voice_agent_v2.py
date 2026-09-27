@@ -15,12 +15,13 @@ import wave
 from nova_voice_activation import wake_request, presence
 
 HOME = os.path.expanduser("~")
+NOVA_HOME = os.environ.get("NOVA_HOME", "/home/aslam/nova_home")
 WHISPER_ROOT = os.path.join(HOME, ".local", "share", "dragon-stt", "whisper.cpp")
 WHISPER = os.path.join(WHISPER_ROOT, "build", "bin", "whisper-cli")
 WHISPER_MODEL = os.path.join(WHISPER_ROOT, "models", "ggml-base.bin")
 VOICE_SCRIPT = "/home/aslam/nova-life/bin/nova_speak.sh"
 CAPTURE_NODE = os.environ.get("NOVA_CAPTURE_NODE", "bluez_input.34:C7:39:24:68:8E")
-LOG_FILE = "/mnt/extra_sd/nova_home/journal/local_voice.log"
+LOG_FILE = os.path.join(NOVA_HOME, "journal", "local_voice.log")
 
 RATE = 16000
 CHANNELS = 1

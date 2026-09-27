@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
 TEXT="${1:-Hi machi, NOVA here. Un kitta konjam pesa vandhen. Free-aa irundha voice note la sollu.}"
-ROOT="/mnt/extra_sd/nova_home/whatsapp_outbox"
+ROOT="$NOVA_HOME/whatsapp_outbox"
 PENDING="$ROOT/pending"
 STAMP="$(date +%Y%m%dT%H%M%S)"
 ID="call-${STAMP}-$$"

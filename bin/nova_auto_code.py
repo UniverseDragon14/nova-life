@@ -10,7 +10,8 @@ from pathlib import Path
 
 ROOT = Path("/home/aslam/nova-life").resolve()
 BIN = ROOT / "bin"
-STATE = Path("/mnt/extra_sd/nova_home/autocode")
+NOVA_HOME = Path(os.environ.get("NOVA_HOME", "/home/aslam/nova_home"))
+STATE = NOVA_HOME / "autocode"
 LOG = STATE / "logs" / "autocode.jsonl"
 BACKUPS = STATE / "backups"
 MODEL = os.environ.get("NOVA_AUTOCODE_MODEL", "llama3.2:latest")

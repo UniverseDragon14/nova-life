@@ -11,8 +11,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path("/home/aslam/nova-life")
-HOME = Path("/mnt/extra_sd/nova_home")
-LEARN = HOME / "learning"
+NOVA_HOME = Path(os.environ.get("NOVA_HOME", "/home/aslam/nova_home"))
+LEARN = NOVA_HOME / "learning"
 STATE = LEARN / "public_learning_state.json"
 LOG = LEARN / "public_learning.jsonl"
 MAX_BYTES = 512 * 1024

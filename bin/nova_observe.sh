@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-J=/mnt/extra_sd/nova_home/journal
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
+J="$NOVA_HOME/journal"
 P=proposals/pending
 LOG="$J/$(date +%Y-%m).log"
 

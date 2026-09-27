@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-J=/mnt/extra_sd/nova_home/journal
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
+J="$NOVA_HOME/journal"
 TS=$(date -Is)
 if ./bin/dragon_verify.sh >/dev/null 2>&1; then CORE=ok; else CORE=ALERT; fi
 V=$(./bin/nova_vitals.sh)

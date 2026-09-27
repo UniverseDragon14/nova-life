@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
 TEXT="${1:-}"
 REQUESTED="${2:-auto}"
 INTENSITY="${3:-0.65}"
 VOICE_URL="${NOVA_VOICE_URL:-http://127.0.0.1:8124/v2/speak}"
-MODE_FILE="${NOVA_VOICE_MODE_FILE:-/mnt/extra_sd/nova_home/config/voice_mode}"
+MODE_FILE="${NOVA_VOICE_MODE_FILE:-$NOVA_HOME/config/voice_mode}"
 WORK=$(mktemp -d /tmp/nova-speak.XXXXXX)
 trap 'rm -rf -- "$WORK"' EXIT
 WAV="$WORK/speech.wav"

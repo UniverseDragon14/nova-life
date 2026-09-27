@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path("/home/aslam/nova-life")
-NOVA_HOME = Path("/mnt/extra_sd/nova_home")
+NOVA_HOME = Path(os.environ.get("NOVA_HOME", "/home/aslam/nova_home"))
 EXP_ROOT = NOVA_HOME / "experiments"
 DURATION = 60 * 60
 INTERVAL = 60

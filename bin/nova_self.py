@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """NOVA self-model: identity, body state, goals, episodic memory."""
 import datetime
+import os
 import sqlite3
 import subprocess
 import sys
 from pathlib import Path
 
-DB = Path("/mnt/extra_sd/nova_home/self/nova_self.db")
+NOVA_HOME = Path(os.environ.get("NOVA_HOME", "/home/aslam/nova_home"))
+DB = NOVA_HOME / "self" / "nova_self.db"
 DB.parent.mkdir(parents=True, exist_ok=True)
 
 def now():
@@ -34,7 +36,7 @@ def init():
         "owner": "Aslam",
         "version": "0.1",
         "body": "Raspberry Pi 5 (nova-pi)",
-        "home": "/mnt/extra_sd/nova_home",
+        "home": str(NOVA_HOME),
         "born": now(),
     }
     for k, v in identity.items():

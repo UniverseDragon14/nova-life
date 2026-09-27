@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-MODE_FILE="${NOVA_VOICE_MODE_FILE:-/mnt/extra_sd/nova_home/config/voice_mode}"
+NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
+MODE_FILE="${NOVA_VOICE_MODE_FILE:-$NOVA_HOME/config/voice_mode}"
 MODE="${1:-status}"
 
 case "$MODE" in

@@ -9,8 +9,8 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path("/home/aslam/nova-life")
-HOME = Path("/mnt/extra_sd/nova_home")
-STATE_DIR = HOME / "agent"
+NOVA_HOME = Path(os.environ.get("NOVA_HOME", "/home/aslam/nova_home"))
+STATE_DIR = NOVA_HOME / "agent"
 STATE_FILE = STATE_DIR / "agent_state.json"
 LOG_FILE = STATE_DIR / "agent.jsonl"
 PENDING = ROOT / "proposals" / "pending"
