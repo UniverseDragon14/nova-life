@@ -1,97 +1,0 @@
-sending incremental file list
-created directory /mnt/extra_sd/sdb1_archive
-./
-01fish.bin
-         32.77K   0%    0.00kB/s    0:00:00           20.22M  72%   19.23MB/s    0:00:00           27.88M 100%   19.51MB/s    0:00:01 (xfr#1, to-chk=67/69)
-02count down.bin
-         32.77K   0%   83.12kB/s    0:13:22           12.35M  18%   11.77MB/s    0:00:04           32.80M  49%   15.56MB/s    0:00:02           52.99M  79%   16.74MB/s    0:00:00           66.76M 100%   17.30MB/s    0:00:03 (xfr#2, to-chk=66/69)
-03wine .bin
-         32.77K   0%   46.51kB/s    0:12:57            6.59M  18%    6.26MB/s    0:00:04           27.30M  75%   12.89MB/s    0:00:00           36.21M 100%   14.15MB/s    0:00:02 (xfr#3, to-chk=65/69)
-04cherries.bin
-         32.77K   0%   71.91kB/s    0:10:18           11.57M  25%   11.03MB/s    0:00:02           31.49M  70%   15.02MB/s    0:00:00           44.54M 100%   16.18MB/s    0:00:02 (xfr#4, to-chk=64/69)
-05anglerfish.bin
-         32.77K   0%   49.16kB/s    0:16:58            7.37M  14%    7.00MB/s    0:00:05           27.56M  55%   13.03MB/s    0:00:01           47.74M  95%   15.09MB/s    0:00:00           50.10M 100%   15.34MB/s    0:00:03 (xfr#5, to-chk=63/69)
-06Father Christmas.bin
-         32.77K   0%  262.30kB/s    0:05:07           17.86M  22%   17.03MB/s    0:00:03           38.31M  47%   18.27MB/s    0:00:02           59.02M  73%   18.73MB/s    0:00:01           79.46M  98%   18.87MB/s    0:00:00           80.65M 100%   18.98MB/s    0:00:04 (xfr#6, to-chk=62/69)
-07Pikachu.bin
-         32.77K   0%  533.33kB/s    0:02:36           19.69M  23%   18.69MB/s    0:00:03           40.67M  48%   19.29MB/s    0:00:02           61.64M  73%   19.50MB/s    0:00:01           82.61M  99%   19.55MB/s    0:00:00           83.43M 100%   19.65MB/s    0:00:04 (xfr#7, to-chk=61/69)
-08Coca Cola.bin
-         32.77K   0%  800.00kB/s    0:00:34           19.96M  71%   18.84MB/s    0:00:00           27.88M 100%   19.24MB/s    0:00:01 (xfr#8, to-chk=60/69)
-09christmas merry.bin
-         32.77K   0%   80.81kB/s    0:14:20           12.35M  17%   11.66MB/s    0:00:04           32.54M  46%   15.43MB/s    0:00:02           52.72M  75%   16.69MB/s    0:00:00           69.54M 100%   17.31MB/s    0:00:03 (xfr#9, to-chk=59/69)
-10rose.bin
-         32.77K   0%   37.96kB/s    0:12:13            3.44M  12%    3.27MB/s    0:00:07           23.63M  84%   11.18MB/s    0:00:00           27.88M 100%   12.06MB/s    0:00:02 (xfr#10, to-chk=58/69)
-APP and PC(1).zip
-         11.53K 100%   59.56kB/s    0:00:00           11.53K 100%   59.56kB/s    0:00:00 (xfr#11, to-chk=57/69)
-Alarms/
-Android/
-Android/data/
-Android/data/.nomedia
-              0 100%    0.00kB/s    0:00:00 (xfr#12, to-chk=37/69)
-Android/data/com.google.android.youtube/
-Android/data/com.google.android.youtube/files/
-Android/data/com.google.android.youtube/files/offline/
-Android/data/com.google.android.youtube/files/offline/uomLxq93Kgp9BLQ4/
-Android/data/com.google.android.youtube/files/offline/uomLxq93Kgp9BLQ4/streams/
-Android/data/com.google.android.youtube/files/offline/uomLxq93Kgp9BLQ4/streams/3c0bd9ce74602c74.uid
-              0 100%    0.00kB/s    0:00:00 (xfr#13, to-chk=26/69)
-Android/data/com.huawei.android.thememanager/
-Android/data/com.huawei.android.thememanager/cache/
-Android/data/com.huawei.android.thememanager/files/
-Android/data/com.huawei.filemanager/
-Android/data/com.huawei.filemanager/cache/
-Android/data/com.huawei.filemanager/files/
-Android/data/com.huawei.hilink.framework/
-Android/data/com.huawei.phoneservice/
-Android/data/com.huawei.phoneservice/cache/
-Android/data/com.huawei.phoneservice/files/
-Android/data/com.mxtech.videoplayer.ad/
-Android/data/com.mxtech.videoplayer.ad/cache/
-Android/data/com.mxtech.videoplayer.ad/files/
-Audiobooks/
-DCIM/
-Documents/
-Download/
-Huawei/
-HuaweiSystem/
-LOST.DIR/
-Movies/
-Movies/.thumbnails/
-Movies/.thumbnails/.database_uuid
-             36 100%    0.19kB/s    0:00:00               36 100%    0.19kB/s    0:00:00 (xfr#14, to-chk=16/69)
-Movies/.thumbnails/.nomedia
-              0 100%    0.00kB/s    0:00:00 (xfr#15, to-chk=15/69)
-Music/
-Music/.thumbnails/
-Music/.thumbnails/.database_uuid
-             36 100%    0.19kB/s    0:00:00               36 100%    0.19kB/s    0:00:00 (xfr#16, to-chk=13/69)
-Music/.thumbnails/.nomedia
-              0 100%    0.00kB/s    0:00:00 (xfr#17, to-chk=12/69)
-Notifications/
-Pictures/
-Pictures/.Gallery2/
-Pictures/.Gallery2/.nomedia
-              0 100%    0.00kB/s    0:00:00 (xfr#18, to-chk=8/69)
-Pictures/.Gallery2/recycle/
-Pictures/.Gallery2/recycle/bins/
-Pictures/.thumbnails/
-Pictures/.thumbnails/.database_uuid
-             36 100%    0.19kB/s    0:00:00               36 100%    0.19kB/s    0:00:00 (xfr#19, to-chk=5/69)
-Pictures/.thumbnails/.nomedia
-              0 100%    0.00kB/s    0:00:00 (xfr#20, to-chk=4/69)
-Pictures/hiddenAlbum/
-Pictures/hiddenAlbum/.nomedia
-             39 100%    0.20kB/s    0:00:00               39 100%    0.20kB/s    0:00:00 (xfr#21, to-chk=3/69)
-Pictures/hiddenAlbum/bins/
-Podcasts/
-Recordings/
-Ringtones/
-Sounds/
-System Volume Information/
-System Volume Information/IndexerVolumeGuid
-             76 100%    0.39kB/s    0:00:00               76 100%    0.39kB/s    0:00:00 (xfr#22, to-chk=1/69)
-System Volume Information/WPSettings.dat
-             12 100%    0.06kB/s    0:00:00               12 100%    0.06kB/s    0:00:00 (xfr#23, to-chk=0/69)
-
-sent 515.00M bytes  received 689 bytes  19.43M bytes/sec
-total size is 514.87M  speedup is 1.00

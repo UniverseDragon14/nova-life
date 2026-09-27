@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 NOVA_HOME="${NOVA_HOME:-/home/aslam/nova_home}"
 J="$NOVA_HOME/journal"
+mkdir -p "$J" || { echo "journal unavailable: $J" >&2; exit 1; }
 TS=$(date -Is)
 if ./bin/dragon_verify.sh >/dev/null 2>&1; then CORE=ok; else CORE=ALERT; fi
 V=$(./bin/nova_vitals.sh)

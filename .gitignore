@@ -3,3 +3,7 @@ __pycache__/
 *.bak
 *.bak-*
 vision/*.onnx
+backups/
+proposals/pending/
+proposals/approved/
+*.bak.*
