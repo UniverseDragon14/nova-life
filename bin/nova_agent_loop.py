@@ -14,10 +14,14 @@ STATE_DIR = NOVA_HOME / "agent"
 STATE_FILE = STATE_DIR / "agent_state.json"
 LOG_FILE = STATE_DIR / "agent.jsonl"
 PENDING = ROOT / "proposals" / "pending"
+APPROVED = ROOT / "proposals" / "approved"
+REJECTED = ROOT / "proposals" / "rejected"
+PROPOSAL_COOLDOWN_SECONDS = 6 * 3600
 INTERVAL = int(os.environ.get("NOVA_AGENT_INTERVAL", "60"))
 
 STATE_DIR.mkdir(parents=True, exist_ok=True)
-PENDING.mkdir(parents=True, exist_ok=True)
+for proposal_dir in (PENDING, APPROVED, REJECTED):
+    proposal_dir.mkdir(parents=True, exist_ok=True)
 RUNNING = True
 
 def now():
@@ -96,32 +100,101 @@ def understand(obs):
     issues = []
     v = obs["vitals"]
     if not obs["core_ok"]:
-        issues.append(("core_integrity", "Core verification failed"))
+        issues.append(("core_integrity", "Core verification failed", "urgent", 2))
     if not obs["voice_agent"]:
-        issues.append(("voice_agent_down", "NOVA voice agent is not running"))
+        issues.append(("voice_agent_down", "NOVA voice agent is not running", "warning", 1))
     if not obs["camera_process"]:
-        issues.append(("camera_process_down", "NOVA camera presence process is not running"))
+        issues.append(("camera_process_down", "NOVA camera presence process is not running", "warning", 1))
     elif not obs["camera_ok"]:
-        issues.append(("camera_unavailable", "Camera process is alive but no usable camera frame is available"))
+        issues.append(("camera_unavailable", "Camera process is alive but no usable camera frame is available", "warning", 1))
     if v.get("disk") is not None and v["disk"] >= 85:
-        issues.append(("disk_high", f"Root disk usage is {v['disk']}%"))
-    if v.get("temp") is not None and v["temp"] >= 70:
-        issues.append(("temp_high", f"Pi temperature is {v['temp']} C"))
+        rank = 2 if v["disk"] >= 95 else 1
+        severity = "urgent" if rank == 2 else "warning"
+        issues.append(("disk_high", f"Root disk usage is {v['disk']}%", severity, rank))
+    if v.get("temp") is not None:
+        if v["temp"] >= 80:
+            issues.append(("temp_high", f"Pi temperature is {v['temp']} C (urgent >= 80 C)", "urgent", 2))
+        elif v["temp"] >= 75:
+            issues.append(("temp_high", f"Pi temperature is {v['temp']} C (warning >= 75 C)", "warning", 1))
     return issues
 
 def safe_slug(value):
     return "".join(c if c.isalnum() or c in "-_" else "-" for c in value)
 
-def ensure_proposal(issue_id, detail):
-    pid = "agent-" + safe_slug(issue_id)
-    path = PENDING / f"{pid}.json"
-    if path.exists():
+def proposal_time(data):
+    for key in ("decided_at", "owner_decision_at", "created"):
+        value = data.get(key)
+        if not value:
+            continue
+        try:
+            return datetime.fromisoformat(str(value).replace("Z", "+00:00")).timestamp()
+        except (TypeError, ValueError):
+            pass
+    return 0.0
+
+def proposal_condition(data, path):
+    condition = data.get("condition")
+    if condition:
+        return str(condition)
+    stem = path.stem
+    if stem.startswith("agent-"):
+        return stem.removeprefix("agent-").split("-", 1)[0]
+    return ""
+
+def load_proposals(directory):
+    rows = []
+    for path in directory.glob("*.json"):
+        try:
+            rows.append((path, json.loads(path.read_text(encoding="utf-8"))))
+        except Exception:
+            continue
+    return rows
+
+def ensure_proposal(issue_id, detail, severity="warning", severity_rank=1):
+    base = "agent-" + safe_slug(issue_id)
+
+    for path, data in load_proposals(PENDING):
+        if proposal_condition(data, path) != issue_id and path.stem != base:
+            continue
+        previous_rank = int(data.get("severity_rank", 1) or 1)
+        if severity_rank > previous_rank:
+            data.update({
+                "observation": detail,
+                "severity": severity,
+                "severity_rank": severity_rank,
+                "updated": now(),
+            })
+            path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+            return "severity_raised"
         return "already_pending"
+
+    decided = []
+    for directory in (APPROVED, REJECTED):
+        for path, data in load_proposals(directory):
+            if proposal_condition(data, path) == issue_id or path.stem == base:
+                decided.append((proposal_time(data), int(data.get("severity_rank", 1) or 1)))
+    if decided:
+        decided.sort(reverse=True, key=lambda row: row[0])
+        decision_time, previous_rank = decided[0]
+        if decision_time and time.time() - decision_time < PROPOSAL_COOLDOWN_SECONDS:
+            if severity_rank <= previous_rank:
+                return "decision_cooldown"
+
+    pid = base
+    if (APPROVED / f"{pid}.json").exists() or (REJECTED / f"{pid}.json").exists():
+        pid = base + "-" + datetime.now().strftime("%Y%m%dT%H%M%S")
+    path = PENDING / f"{pid}.json"
     data = {
-        "id": pid, "created": now(), "observation": detail,
+        "id": pid,
+        "condition": issue_id,
+        "created": now(),
+        "observation": detail,
         "suggestion": "Inspect and repair this condition; request owner approval before service, hardware, network, credential, or system-wide changes.",
         "risk": "Agent did not perform risky recovery automatically.",
-        "status": "pending"
+        "severity": severity,
+        "severity_rank": severity_rank,
+        "status": "pending",
     }
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n",
                     encoding="utf-8")
@@ -144,7 +217,7 @@ def record_action(state, name, ok):
 def speak_decision(state, issue_id, detail):
     spoken = state.setdefault("decision_spoken", {})
     last = float(spoken.get(issue_id, 0))
-    if time.time() - last < 3600:
+    if time.time() - last < PROPOSAL_COOLDOWN_SECONDS:
         return "cooldown"
     messages = {
         "core_integrity": "அஸ்லாம் பாஸ், நோவா கோர் verification fail ஆகியிருக்கிறது. மாற்றம் செய்யாமல் நிறுத்தியிருக்கேன். உங்கள் approval தேவை.",
@@ -182,13 +255,13 @@ def act(state, obs, issues):
                         "detail": (out or err)[-300:]})
         state["last_observe"] = t
 
-    for issue_id, detail in issues:
+    for issue_id, detail, severity, severity_rank in issues:
         remember_once(state, issue_id, detail)
         if issue_id in {
             "core_integrity", "voice_agent_down", "camera_process_down",
             "camera_unavailable", "temp_high", "disk_high"
         }:
-            result = ensure_proposal(issue_id, detail)
+            result = ensure_proposal(issue_id, detail, severity, severity_rank)
             voice_result = speak_decision(state, issue_id, detail)
             actions.append({"action": "proposal", "issue": issue_id,
                             "result": result, "voice": voice_result})
@@ -218,7 +291,8 @@ def one_cycle(state):
     actions = act(state, obs, issues)
     learn_cycle(state, obs, issues, actions)
     log("cycle", observation=obs,
-        issues=[{"id": x, "detail": y} for x, y in issues],
+        issues=[{"id": x, "detail": y, "severity": sev, "severity_rank": rank}
+                for x, y, sev, rank in issues],
         actions=actions)
     save_state(state)
     return obs, issues, actions

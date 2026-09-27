@@ -86,9 +86,9 @@ def metrics():
     return disk, temp, up
 
 def mood_for(disk, temp):
-    if disk >= 90 or temp >= 70:
+    if disk >= 90 or temp >= 80:
         return "stressed"
-    if disk >= 80 or temp >= 65:
+    if disk >= 80 or temp >= 75:
         return "worried"
     if disk >= 70 or temp >= 60:
         return "calm"
