@@ -12,13 +12,17 @@ trap '/usr/bin/rm -rf "$TMP"' EXIT
 BASE="$TMP/base"
 /usr/bin/git clone -q --no-hardlinks "$SRC_ROOT" "$BASE"
 /usr/bin/cp "$CANDIDATE" "$BASE/bin/dragon_verify.sh"
+/usr/bin/cp "$SRC_ROOT/core/ATTESTATION_METADATA_v1.txt" "$BASE/core/"
+/usr/bin/cp "$SRC_ROOT/core/ATTESTATION_METADATA_v1.txt.sig" "$BASE/core/"
 /usr/bin/chmod 0755 "$BASE/bin/dragon_verify.sh"
 /usr/bin/chmod 0644 \
   "$BASE/core/nova.core.json" \
   "$BASE/core/nova.core.sha256" \
   "$BASE/core/ATTESTATION.txt" \
   "$BASE/core/ATTESTATION.txt.sig" \
-  "$BASE/core/allowed_signers"
+  "$BASE/core/allowed_signers" \
+  "$BASE/core/ATTESTATION_METADATA_v1.txt" \
+  "$BASE/core/ATTESTATION_METADATA_v1.txt.sig"
 
 pass=0
 fail=0
@@ -156,6 +160,17 @@ r=$(new_case core_dir_symlink)
 /usr/bin/mv "$r/core" "$r/outside-core"
 /usr/bin/ln -s outside-core "$r/core"
 expect_case core_dir_symlink "$r" "DRAGON_ALERT trusted_path_invalid"
+
+r=$(new_case metadata_attestation_tampered)
+/usr/bin/python3 - "$r/core/ATTESTATION_METADATA_v1.txt" <<'PY'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1])
+s=p.read_text()
+s=s.replace("date=2026-09-28", "date=2026-09-29", 1)
+p.write_text(s)
+PY
+expect_case metadata_attestation_tampered "$r" "DRAGON_ALERT metadata_owner_signature_invalid"
 
 printf 'TOTAL_PASS=%s\nTOTAL_FAIL=%s\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

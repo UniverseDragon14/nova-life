@@ -1,0 +1,6 @@
+purpose=metadata-only hardening, no content change
+base_commit=2006f008d7e17012a3495af166f2e3a176d673af
+file=core/nova.core.json mode=0644 sha256=84be82d181e0fc63a7221d0fa701ca8c44f4fb546cee737acd4356dea8c54564
+file=core/nova.core.sha256 mode=0644 sha256=0cd66523590a47d1c28518743daba3903c850436a1be878bf6350cb38542164a
+date=2026-09-28
+approved_by=owner
