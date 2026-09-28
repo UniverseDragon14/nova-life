@@ -1,0 +1,19 @@
+[Unit]
+Description=NOVA camera availability watch v0.1
+After=default.target
+
+[Service]
+Type=simple
+Environment=PYTHONUNBUFFERED=1
+Environment=NOVA_CAMERA_WATCH_STATE=/home/aslam/.local/state/nova/camera_state.json
+ExecStart=/usr/bin/python3 /home/aslam/nova-life/bin/nova_camera_watch.py
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/aslam/.local/state/nova
+
+[Install]
+WantedBy=default.target
