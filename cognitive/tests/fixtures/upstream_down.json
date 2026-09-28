@@ -1,0 +1,35 @@
+{
+  "dns_direct": {
+    "state": "unknown"
+  },
+  "dns_system": {
+    "state": "unknown"
+  },
+  "expected": "upstream_problem_suspected",
+  "gateway": {
+    "reachable": true,
+    "state": "known"
+  },
+  "gateway_verify": {
+    "reachable": true,
+    "state": "known"
+  },
+  "http": {
+    "state": "unknown"
+  },
+  "routes": [
+    {
+      "excluded": false,
+      "gateway": "192.0.2.1",
+      "iface": "wlan0",
+      "metric": 600
+    }
+  ],
+  "tcp": {
+    "state": "known",
+    "targets": {
+      "1.1.1.1:443": false,
+      "8.8.8.8:443": false
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "dns_direct": {
+    "direct_dns_ok": true,
+    "names": {
+      "example.com": true,
+      "google.com": true
+    },
+    "state": "known"
+  },
+  "dns_system": {
+    "names": {
+      "example.com": true,
+      "google.com": true
+    },
+    "state": "known",
+    "system_dns_ok": true
+  },
+  "expected": "network_appears_healthy",
+  "gateway": {
+    "reachable": true,
+    "state": "known"
+  },
+  "gateway_verify": {
+    "reachable": true,
+    "state": "known"
+  },
+  "http": {
+    "state": "known",
+    "targets": {
+      "clients3.google.com": {
+        "ok_204": true,
+        "status": 204
+      },
+      "connectivitycheck.gstatic.com": {
+        "ok_204": true,
+        "status": 204
+      }
+    }
+  },
+  "routes": [
+    {
+      "excluded": false,
+      "gateway": "192.0.2.1",
+      "iface": "wlan0",
+      "metric": 600
+    }
+  ],
+  "tcp": {
+    "state": "known",
+    "targets": {
+      "1.1.1.1:443": true,
+      "8.8.8.8:443": true
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "scenario": "network_diagnosis",
+  "goal_type": "diagnose",
+  "required_fields": ["interface"],
+  "success_check": "diagnosis is derived from traceable probe and verifier evidence",
+  "unknown_policy": "preserve unknown; do not guess"
+}

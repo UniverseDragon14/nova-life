@@ -1,0 +1,31 @@
+{
+  "dns_direct": {
+    "state": "unknown"
+  },
+  "dns_system": {
+    "state": "unknown"
+  },
+  "expected": "local_gateway_problem_suspected",
+  "gateway": {
+    "reachable": false,
+    "state": "known"
+  },
+  "gateway_verify": {
+    "reachable": false,
+    "state": "known"
+  },
+  "http": {
+    "state": "unknown"
+  },
+  "routes": [
+    {
+      "excluded": false,
+      "gateway": "192.0.2.1",
+      "iface": "wlan0",
+      "metric": 600
+    }
+  ],
+  "tcp": {
+    "state": "unknown"
+  }
+}

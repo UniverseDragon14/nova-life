@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "scenario": "network_diagnosis",
+  "actions": {
+    "probe_default_gateway": {"zone": "Green", "verifier": "verify_gateway", "timeout_seconds": 3},
+    "probe_known_ip_tcp": {"zone": "Green", "verifier": "verify_http_204", "timeout_seconds": 3},
+    "probe_dns_system": {"zone": "Green", "verifier": "verify_dns_direct", "timeout_seconds": 3}
+  },
+  "unknown_action": {"zone": "Red"}
+}
