@@ -1,0 +1,10 @@
+purpose=owner-key-enrollment-proof
+rotation_attestation_sha256=d5d014e49172323cf54c023e301fa1df71644ea21f52b5b8cb9afe2c3622512c
+base_commit=dff5e6f9481a4434e5ad58cd2a56a343e7e13c94
+principal=owner
+namespace=udnos-core
+expected_fingerprint=SHA256:eOli/qkcWLGE9Jzh7uxpvJSKq/Ywitpi0sgTFZELkS0
+nonce_hex=b8b41731f48328347fdb9da695e55f0d19b8804d66d9842d33793289a931a363
+issued_at=2026-09-28T16:06:32Z
+expires_at=2026-09-28T16:16:32Z
+single_use=true

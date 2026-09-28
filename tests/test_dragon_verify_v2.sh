@@ -11,18 +11,13 @@ trap '/usr/bin/rm -rf "$TMP"' EXIT
 
 BASE="$TMP/base"
 /usr/bin/git clone -q --no-hardlinks "$SRC_ROOT" "$BASE"
-/usr/bin/cp "$CANDIDATE" "$BASE/bin/dragon_verify.sh"
-/usr/bin/cp "$SRC_ROOT/core/ATTESTATION_METADATA_v1.txt" "$BASE/core/"
-/usr/bin/cp "$SRC_ROOT/core/ATTESTATION_METADATA_v1.txt.sig" "$BASE/core/"
+/usr/bin/git -C "$BASE" checkout -q dff5e6f9481a4434e5ad58cd2a56a343e7e13c94
+
+for f in   bin/dragon_verify.sh   core/ATTESTATION_KEY_ROTATION_v1.txt   core/ATTESTATION_KEY_ROTATION_v1.txt.sig   core/allowed_signers   core/recovery_allowed_signers   core/historical_allowed_signers   core/historical_attestations_v1.txt; do
+  /usr/bin/cp "$SRC_ROOT/$f" "$BASE/$f"
+done
 /usr/bin/chmod 0755 "$BASE/bin/dragon_verify.sh"
-/usr/bin/chmod 0644 \
-  "$BASE/core/nova.core.json" \
-  "$BASE/core/nova.core.sha256" \
-  "$BASE/core/ATTESTATION.txt" \
-  "$BASE/core/ATTESTATION.txt.sig" \
-  "$BASE/core/allowed_signers" \
-  "$BASE/core/ATTESTATION_METADATA_v1.txt" \
-  "$BASE/core/ATTESTATION_METADATA_v1.txt.sig"
+/usr/bin/chmod 0644   "$BASE/core/nova.core.json"   "$BASE/core/nova.core.sha256"   "$BASE/core/ATTESTATION.txt"   "$BASE/core/ATTESTATION.txt.sig"   "$BASE/core/ATTESTATION_METADATA_v1.txt"   "$BASE/core/ATTESTATION_METADATA_v1.txt.sig"   "$BASE/core/ATTESTATION_KEY_ROTATION_v1.txt"   "$BASE/core/ATTESTATION_KEY_ROTATION_v1.txt.sig"   "$BASE/core/allowed_signers"   "$BASE/core/recovery_allowed_signers"   "$BASE/core/historical_allowed_signers"   "$BASE/core/historical_attestations_v1.txt"
 
 pass=0
 fail=0
@@ -35,10 +30,7 @@ new_case() {
 }
 
 expect_case() {
-  local name="$1"
-  local repo="$2"
-  local expected="$3"
-  local expected_rc="${4:-nonzero}"
+  local name="$1" repo="$2" expected="$3" expected_rc="${4:-nonzero}"
   local out rc
   set +e
   out=$("$repo/bin/dragon_verify.sh" 2>&1)
@@ -46,18 +38,18 @@ expect_case() {
   set -e
   if [ "$expected_rc" = "zero" ]; then
     if [ "$rc" -eq 0 ] && [[ "$out" == *"$expected"* ]]; then
-      printf 'PASS %-28s rc=%s %s\n' "$name" "$rc" "$expected"
+      printf 'PASS %-32s rc=%s %s\n' "$name" "$rc" "$expected"
       pass=$((pass+1))
     else
-      printf 'FAIL %-28s rc=%s out=%s\n' "$name" "$rc" "$out"
+      printf 'FAIL %-32s rc=%s out=%s\n' "$name" "$rc" "$out"
       fail=$((fail+1))
     fi
   else
     if [ "$rc" -ne 0 ] && [[ "$out" == *"$expected"* ]]; then
-      printf 'PASS %-28s rc=%s %s\n' "$name" "$rc" "$expected"
+      printf 'PASS %-32s rc=%s %s\n' "$name" "$rc" "$expected"
       pass=$((pass+1))
     else
-      printf 'FAIL %-28s rc=%s out=%s\n' "$name" "$rc" "$out"
+      printf 'FAIL %-32s rc=%s out=%s\n' "$name" "$rc" "$out"
       fail=$((fail+1))
     fi
   fi
@@ -69,7 +61,6 @@ expect_case baseline "$r" "DRAGON_OK core intact and owner-attested" zero
 r=$(new_case core_changed)
 /usr/bin/printf '\n' >> "$r/core/nova.core.json"
 expect_case core_changed "$r" "DRAGON_ALERT core_hash_mismatch"
-
 r=$(new_case core_and_seal_changed)
 /usr/bin/printf '\n' >> "$r/core/nova.core.json"
 ( cd "$r" && /usr/bin/sha256sum core/nova.core.json > core/nova.core.sha256 )
@@ -84,16 +75,15 @@ s=s.replace("statement: I, the owner, reviewed and approve this core.",
             "statement: I, the owner, reviewed and approve this core. altered",1)
 p.write_text(s)
 PY
-expect_case attestation_changed "$r" "DRAGON_ALERT owner_signature_invalid"
+expect_case attestation_changed "$r" "DRAGON_ALERT historical_attestation_hash_mismatch"
 
 r=$(new_case wrong_namespace)
 /usr/bin/sed -i 's/namespaces="udnos-core"/namespaces="wrong-core"/' "$r/core/allowed_signers"
-expect_case wrong_namespace "$r" "DRAGON_ALERT owner_signature_invalid"
+expect_case wrong_namespace "$r" "DRAGON_ALERT current_signers_hash_mismatch"
 
 r=$(new_case wrong_identity)
 /usr/bin/sed -i 's/^owner /other /' "$r/core/allowed_signers"
-expect_case wrong_identity "$r" "DRAGON_ALERT owner_signature_invalid"
-
+expect_case wrong_identity "$r" "DRAGON_ALERT current_signers_hash_mismatch"
 r=$(new_case missing_signature)
 /usr/bin/rm -f "$r/core/ATTESTATION.txt.sig"
 expect_case missing_signature "$r" "DRAGON_ALERT required_material_missing"
@@ -103,25 +93,23 @@ r=$(new_case wrong_public_key)
 pub=$(/usr/bin/cat "$r/wrong_key.pub")
 /usr/bin/printf 'owner namespaces="udnos-core" %s\n' "$pub" > "$r/core/allowed_signers"
 /usr/bin/rm -f "$r/wrong_key" "$r/wrong_key.pub"
-expect_case wrong_public_key "$r" "DRAGON_ALERT owner_signature_invalid"
+expect_case wrong_public_key "$r" "DRAGON_ALERT current_signers_hash_mismatch"
 
 r=$(new_case duplicate_sha)
 line=$(/usr/bin/grep '^core_sha256:' "$r/core/ATTESTATION.txt")
 /usr/bin/printf '%s\n' "$line" >> "$r/core/ATTESTATION.txt"
-expect_case duplicate_sha "$r" "DRAGON_ALERT attestation_malformed"
+expect_case duplicate_sha "$r" "DRAGON_ALERT historical_attestation_hash_mismatch"
 
 r=$(new_case commit_blob_mismatch)
-other=$(/usr/bin/git -C "$r" rev-parse c0c98ca)
-/usr/bin/python3 - "$r/core/ATTESTATION.txt" "$other" <<'PY'
+/usr/bin/python3 - "$r/core/ATTESTATION.txt" <<'PY'
 from pathlib import Path
 import sys,re
-p=Path(sys.argv[1]); other=sys.argv[2]
-s=p.read_text()
-s=re.sub(r'^core_commit: [0-9a-fA-F]{40}$', 'core_commit: '+other, s, count=1, flags=re.M)
+p=Path(sys.argv[1]); s=p.read_text()
+s=re.sub(r'^core_commit: [0-9a-fA-F]{40}$',
+         'core_commit: c0c98ca000000000000000000000000000000000',s,count=1,flags=re.M)
 p.write_text(s)
 PY
-expect_case commit_blob_mismatch "$r" "DRAGON_ALERT attested_commit_mismatch"
-
+expect_case commit_blob_mismatch "$r" "DRAGON_ALERT historical_attestation_hash_mismatch"
 r=$(new_case symlink_swap)
 /usr/bin/mv "$r/core/ATTESTATION.txt" "$r/attestation.real"
 /usr/bin/ln -s ../attestation.real "$r/core/ATTESTATION.txt"
@@ -145,10 +133,10 @@ out=$(PATH="$r/fakebin:/usr/bin:/bin" "$r/bin/dragon_verify.sh" 2>&1)
 rc=$?
 set -e
 if [ "$rc" -eq 0 ] && [[ "$out" == *"DRAGON_OK core intact and owner-attested"* ]] && [ ! -e "$r/PATH_HIJACKED" ]; then
-  printf 'PASS %-28s rc=%s absolute-tools-used\n' path_hijack "$rc"
+  printf 'PASS %-32s rc=%s absolute-tools-used\n' path_hijack "$rc"
   pass=$((pass+1))
 else
-  printf 'FAIL %-28s rc=%s out=%s marker=%s\n' path_hijack "$rc" "$out" "$([ -e "$r/PATH_HIJACKED" ] && echo yes || echo no)"
+  printf 'FAIL %-32s rc=%s out=%s\n' path_hijack "$rc" "$out"
   fail=$((fail+1))
 fi
 
@@ -165,12 +153,11 @@ r=$(new_case metadata_attestation_tampered)
 /usr/bin/python3 - "$r/core/ATTESTATION_METADATA_v1.txt" <<'PY'
 from pathlib import Path
 import sys
-p=Path(sys.argv[1])
-s=p.read_text()
-s=s.replace("date=2026-09-28", "date=2026-09-29", 1)
+p=Path(sys.argv[1]); s=p.read_text()
+s=s.replace("date=2026-09-28","date=2026-09-29",1)
 p.write_text(s)
 PY
-expect_case metadata_attestation_tampered "$r" "DRAGON_ALERT metadata_owner_signature_invalid"
+expect_case metadata_attestation_tampered "$r" "DRAGON_ALERT historical_metadata_hash_mismatch"
 
-printf 'TOTAL_PASS=%s\nTOTAL_FAIL=%s\n' "$pass" "$fail"
-[ "$fail" -eq 0 ]
+printf 'OLD17_TOTAL_PASS=%s\nOLD17_TOTAL_FAIL=%s\n' "$pass" "$fail"
+[ "$pass" -eq 17 ] && [ "$fail" -eq 0 ]
